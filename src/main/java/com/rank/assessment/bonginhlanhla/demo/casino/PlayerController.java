@@ -1,6 +1,7 @@
 package com.rank.assessment.bonginhlanhla.demo.casino;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,17 +27,17 @@ public class PlayerController {
     }
 
     @GetMapping(path = "/current-balance/{playerId}/{transactionId}")
-    public float currentBalance(@PathVariable long playerId, @PathVariable long transactionId) {
+    public ResponseEntity currentBalance(@PathVariable long playerId, @PathVariable long transactionId) {
         return playerService.getCurrentBalance(playerId, transactionId);
     }
 
-    @PostMapping(path = "/wagering/{playerId}/{transactionId}")
-    public float wagering(@PathVariable long playerId, @PathVariable long transactionId) {
-        return playerService.getCurrentBalance(playerId, transactionId);
+    @PostMapping(path = "/wagering/{playerId}/{transactionId}/{amount}")
+    public ResponseEntity wagering(@PathVariable long playerId, @PathVariable long transactionId, @PathVariable float amount) {
+        return playerService.wager(playerId, transactionId, amount);
     }
 
     @PostMapping(path = "/winning/{playerId}/{transactionId}")
-    public float winning(@PathVariable long playerId, @PathVariable long transactionId) {
+    public ResponseEntity winning(@PathVariable long playerId, @PathVariable long transactionId) {
         return playerService.getCurrentBalance(playerId, transactionId);
     }
 
