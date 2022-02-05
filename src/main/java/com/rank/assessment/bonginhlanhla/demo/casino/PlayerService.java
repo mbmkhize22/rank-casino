@@ -48,4 +48,18 @@ public class PlayerService {
         LOG.info("AFTER BALANCE: -> " + player.toString());
         return ResponseEntity.status(HttpStatus.OK).body(player.getBalance());
     }
+
+    public ResponseEntity winning(long playerId, long transactionId, float amount) {
+        Boolean exists = playerRepository.existsById(playerId);
+        if(!exists) {
+            throw new IllegalStateException("Player doesn't exists.");
+        }
+
+        Player player = playerRepository.getById(playerId);
+        LOG.info("BEFORE BALANCE: -> " + player.toString());
+        float bal = player.getBalance() + amount;
+        player.setBalance(bal);
+        LOG.info("AFTER BALANCE: -> " + player.toString());
+        return ResponseEntity.status(HttpStatus.OK).body(player.getBalance());
+    }
 }

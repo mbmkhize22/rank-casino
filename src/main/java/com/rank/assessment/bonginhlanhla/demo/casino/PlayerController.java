@@ -36,9 +36,9 @@ public class PlayerController {
         return playerService.wager(playerId, transactionId, amount);
     }
 
-    @PostMapping(path = "/winning/{playerId}/{transactionId}")
-    public ResponseEntity winning(@PathVariable long playerId, @PathVariable long transactionId) {
-        return playerService.getCurrentBalance(playerId, transactionId);
+    @PostMapping(path = "/winning/{playerId}/{transactionId}/{amount}")
+    public ResponseEntity winning(@PathVariable long playerId, @PathVariable long transactionId, @PathVariable float amount) {
+        return playerService.winning(playerId, transactionId, amount);
     }
 
 }
