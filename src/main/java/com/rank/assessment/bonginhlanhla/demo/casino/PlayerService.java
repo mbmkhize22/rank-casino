@@ -87,7 +87,7 @@ public class PlayerService {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Player doesn't exists.");
         }
 
-        LOG.info(_player.toString());
-        return ResponseEntity.status(HttpStatus.OK).body(transactionRepository.findAllByPlayerId(_player.getPlayerId()));
+        LOG.info(transactionType);
+        return ResponseEntity.status(HttpStatus.OK).body(transactionRepository.findAllByPlayerIdTransactionType(_player.getPlayerId(), transactionType));
     }
 }
