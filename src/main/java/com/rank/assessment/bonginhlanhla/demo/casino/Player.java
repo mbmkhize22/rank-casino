@@ -19,6 +19,7 @@ public class Player {
     private String playerName;
     private String username;
     private float balance;
+    private String password;
 
     public Player() {
     }
@@ -68,6 +69,15 @@ public class Player {
         this.balance = balance;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+
     @Override
     public String toString() {
         return "Player{" +
@@ -75,6 +85,7 @@ public class Player {
                 ", playerName='" + playerName + '\'' +
                 ", username='" + username + '\'' +
                 ", balance=" + balance +
+                ", password='" + password + '\'' +
                 '}';
     }
 }

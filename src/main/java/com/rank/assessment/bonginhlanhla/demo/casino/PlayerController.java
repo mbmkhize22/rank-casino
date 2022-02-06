@@ -1,6 +1,7 @@
 package com.rank.assessment.bonginhlanhla.demo.casino;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,6 +40,11 @@ public class PlayerController {
     @PostMapping(path = "/winning/{playerId}/{transactionId}/{amount}")
     public ResponseEntity winning(@PathVariable long playerId, @PathVariable long transactionId, @PathVariable float amount) {
         return playerService.winning(playerId, transactionId, amount);
+    }
+
+    @PostMapping(path = "/transactions/{transactionId}/{transactionType}")
+    public ResponseEntity transactions(@RequestBody Player player, @PathVariable long transactionId, @PathVariable String transactionType) {
+        return playerService.transactions(player, transactionId, transactionType);
     }
 
 }

@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -61,5 +60,10 @@ public class PlayerService {
         player.setBalance(bal);
         LOG.info("AFTER BALANCE: -> " + player.toString());
         return ResponseEntity.status(HttpStatus.OK).body(player.getBalance());
+    }
+
+    public ResponseEntity transactions(Player player, long transactionId, String transactionType) {
+        LOG.info(player.toString());
+        return ResponseEntity.status(HttpStatus.OK).body(player.toString());
     }
 }

@@ -2,6 +2,14 @@
 
 ## Endpoints
 
+##### H2 Database web console
+```shell script
+# use this link to access H2 database management console
+http://localhost:8080/h2-console
+
+#JDBC URL: jdbc:h2:mem:casino
+```
+
 ##### Root [GET]
 ```shell script
 http://localhost:8080/api/v1/player
