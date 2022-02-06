@@ -32,3 +32,14 @@ http://localhost:8080/api/v1/player/wagering/1/1/900
 #http://localhost:8080/api/v1/player/winning/{playerId}/{transactionId}/winAmount
 http://localhost:8080/api/v1/player/winning/1/1/900
 ```
+
+##### GET TRANSACTIONS
+```shell script
+http://localhost:8080/api/v1/player/transactions/1/wager
+```
+```shell script
+{
+    "username": "@mbmkhize",
+    "password": "sandton"
+}
+```

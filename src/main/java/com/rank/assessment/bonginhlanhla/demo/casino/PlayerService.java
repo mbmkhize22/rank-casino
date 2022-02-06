@@ -1,5 +1,8 @@
 package com.rank.assessment.bonginhlanhla.demo.casino;
 
+import com.rank.assessment.bonginhlanhla.demo.transactions.Transaction;
+import com.rank.assessment.bonginhlanhla.demo.transactions.TransactionRepository;
+import com.rank.assessment.bonginhlanhla.demo.transactions.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,10 +17,14 @@ public class PlayerService {
     private static final Logger LOG = Logger.getLogger(PlayerService.class.getName());
 
     private final PlayerRepository playerRepository;
+    private final TransactionService transactionService;
+    private final TransactionRepository transactionRepository;
 
     @Autowired
-    public PlayerService(PlayerRepository playerRepository) {
+    public PlayerService(PlayerRepository playerRepository, TransactionService transactionService, TransactionRepository transactionRepository) {
         this.playerRepository = playerRepository;
+        this.transactionService = transactionService;
+        this.transactionRepository = transactionRepository;
     }
 
     public List listAllPlayers() {
@@ -27,7 +34,7 @@ public class PlayerService {
     public ResponseEntity getCurrentBalance(long playerId, long transactionId) {
         Boolean exists = playerRepository.existsById(playerId);
         if(!exists) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Player doesn't exists.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Player doesn't exists.");
         }
 
         Player player = playerRepository.getById(playerId);
@@ -37,33 +44,50 @@ public class PlayerService {
     public ResponseEntity wager(long playerId, long transactionId, float amount) {
         Boolean exists = playerRepository.existsById(playerId);
         if(!exists) {
-            throw new IllegalStateException("Player doesn't exists.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Player doesn't exists.");
         }
 
         Player player = playerRepository.getById(playerId);
-        LOG.info("BEFORE BALANCE: -> " + player.toString());
+
+        if(player.getBalance() < amount) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("You have less money balance $" + player.getBalance());
+        }
+
+        LOG.info("Record transactions");
+        Transaction transaction = new Transaction(transactionId, playerId, "wager", amount);
+        transactionService.recordTransaction(transaction);
+
         float bal = player.getBalance() - amount;
         player.setBalance(bal);
-        LOG.info("AFTER BALANCE: -> " + player.toString());
-        return ResponseEntity.status(HttpStatus.OK).body(player.getBalance());
+        player.setBalance(bal);
+        playerRepository.save(player);
+        return ResponseEntity.status(HttpStatus.OK).body("Transaction successful");
     }
 
     public ResponseEntity winning(long playerId, long transactionId, float amount) {
         Boolean exists = playerRepository.existsById(playerId);
         if(!exists) {
-            throw new IllegalStateException("Player doesn't exists.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Player doesn't exists.");
         }
 
         Player player = playerRepository.getById(playerId);
-        LOG.info("BEFORE BALANCE: -> " + player.toString());
+        LOG.info("Record transactions");
+        Transaction transaction = new Transaction(transactionId, playerId, "win", amount);
+        transactionService.recordTransaction(transaction);
+
         float bal = player.getBalance() + amount;
         player.setBalance(bal);
-        LOG.info("AFTER BALANCE: -> " + player.toString());
-        return ResponseEntity.status(HttpStatus.OK).body(player.getBalance());
+        playerRepository.save(player);
+        return ResponseEntity.status(HttpStatus.OK).body("Transaction successful");
     }
 
     public ResponseEntity transactions(Player player, long transactionId, String transactionType) {
-        LOG.info(player.toString());
-        return ResponseEntity.status(HttpStatus.OK).body(player.toString());
+        Player _player = playerRepository.findByUsername(player.getUsername());
+        if(_player == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Player doesn't exists.");
+        }
+
+        LOG.info(_player.toString());
+        return ResponseEntity.status(HttpStatus.OK).body(transactionRepository.findAllByPlayerId(_player.getPlayerId()));
     }
 }

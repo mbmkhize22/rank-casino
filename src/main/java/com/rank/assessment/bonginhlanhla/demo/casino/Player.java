@@ -8,18 +8,20 @@ public class Player {
     @Id
     @SequenceGenerator(
             name = "player_sequence",
-            sequenceName = "student_sequence",
+            sequenceName = "player_sequence",
             allocationSize = 1
     )
     @GeneratedValue(
             strategy = GenerationType.SEQUENCE,
-            generator = "student_sequence"
+            generator = "player_sequence"
     )
     private Long playerId;
     private String playerName;
     private String username;
     private float balance;
-    private String password;
+
+    @Transient
+    private String password; //No need to save this in the database
 
     public Player() {
     }

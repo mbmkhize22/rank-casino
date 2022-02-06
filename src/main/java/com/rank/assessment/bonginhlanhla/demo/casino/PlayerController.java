@@ -1,5 +1,6 @@
 package com.rank.assessment.bonginhlanhla.demo.casino;
 
+import com.rank.assessment.bonginhlanhla.demo.transactions.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -11,10 +12,12 @@ import java.util.List;
 @RequestMapping(path = "api/v1/player")
 public class PlayerController {
     private final PlayerService playerService;
+    private final TransactionService transactionService;
 
     @Autowired
-    public PlayerController(PlayerService playerService) {
+    public PlayerController(PlayerService playerService, TransactionService transactionService) {
         this.playerService = playerService;
+        this.transactionService = transactionService;
     }
 
     @GetMapping
@@ -25,6 +28,11 @@ public class PlayerController {
     @GetMapping(path = "/all-players")
     public List allPlayers() {
         return playerService.listAllPlayers();
+    }
+
+    @GetMapping(path = "/all-transactions")
+    public List allTransactions() {
+        return transactionService.listAllTransactions(1);
     }
 
     @GetMapping(path = "/current-balance/{playerId}/{transactionId}")
