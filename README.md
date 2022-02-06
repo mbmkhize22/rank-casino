@@ -33,11 +33,18 @@ http://localhost:8080/api/v1/player/wagering/1/1/900
 http://localhost:8080/api/v1/player/winning/1/1/900
 ```
 
-##### GET TRANSACTIONS
+##### GET TRANSACTIONS [POST]
 ```shell script
+#http://localhost:8080/api/v1/player/transactions/{transactionId}/{transactionType}
+
+# list user wagers
 http://localhost:8080/api/v1/player/transactions/1/wager
+
+# list user wins
+http://localhost:8080/api/v1/player/transactions/1/win
 ```
 ```shell script
+# Payload
 {
     "username": "@mbmkhize",
     "password": "sandton"
