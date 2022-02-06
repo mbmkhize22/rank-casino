@@ -87,6 +87,10 @@ public class PlayerService {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Player doesn't exists.");
         }
 
+        if(!player.getPassword().equals("swordfish")) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("You not authorized to view transactions.");
+        }
+
         LOG.info(transactionType);
         return ResponseEntity.status(HttpStatus.OK).body(transactionRepository.findAllByPlayerIdTransactionType(_player.getPlayerId(), transactionType));
     }
