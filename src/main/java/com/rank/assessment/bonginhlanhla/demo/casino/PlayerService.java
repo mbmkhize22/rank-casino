@@ -87,11 +87,15 @@ public class PlayerService {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Player doesn't exists.");
         }
 
+        /**
+         * In a real application, I will put this in JWT Groups claim.
+         * So that we don't share the password rather assign the security group to authorized users.
+         * This process will make it easy to grant/revoke access via Identity and Access Management.
+         */
         if(!player.getPassword().equals("swordfish")) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("You not authorized to view transactions.");
         }
 
-        LOG.info(transactionType);
         return ResponseEntity.status(HttpStatus.OK).body(transactionRepository.findAllByPlayerIdTransactionType(_player.getPlayerId(), transactionType));
     }
 }
