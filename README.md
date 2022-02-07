@@ -46,7 +46,7 @@ http://localhost:8080/api/v1/player/transactions/1/win
 ```shell script
 # Payload
 {
-    "username": "@mbmkhize",
-    "password": "sandton"
+    "username": "@nhlanhla",
+    "password": "swordfish"
 }
 ```
