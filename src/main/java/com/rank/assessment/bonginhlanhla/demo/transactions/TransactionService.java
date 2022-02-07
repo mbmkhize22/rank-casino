@@ -1,6 +1,7 @@
 package com.rank.assessment.bonginhlanhla.demo.transactions;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,6 +17,7 @@ public class TransactionService {
         this.transactionRepository = transactionRepository;
     }
 
+    @Cacheable("transactions_b")
     public List listAllTransactions(long id) {
         return transactionRepository.findAll();
     }

@@ -4,6 +4,7 @@ import com.rank.assessment.bonginhlanhla.demo.transactions.Transaction;
 import com.rank.assessment.bonginhlanhla.demo.transactions.TransactionRepository;
 import com.rank.assessment.bonginhlanhla.demo.transactions.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -31,12 +32,14 @@ public class PlayerService {
         return playerRepository.findAll();
     }
 
+    //@Cacheable("current_balance")
     public ResponseEntity getCurrentBalance(long playerId, long transactionId) {
         Boolean exists = playerRepository.existsById(playerId);
         if(!exists) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Player doesn't exists.");
         }
 
+        LOG.info("Getting current balance transactionId: " + transactionId);
         Player player = playerRepository.getById(playerId);
         return ResponseEntity.status(HttpStatus.OK).body(player.getBalance());
     }
@@ -50,7 +53,7 @@ public class PlayerService {
         Player player = playerRepository.getById(playerId);
 
         if(player.getBalance() < amount) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("You have less money balance $" + player.getBalance());
+            return ResponseEntity.status(418).body("You have less money balance $" + player.getBalance());
         }
 
         LOG.info("Record transactions");
@@ -81,6 +84,7 @@ public class PlayerService {
         return ResponseEntity.status(HttpStatus.OK).body("Transaction successful");
     }
 
+    @Cacheable("transactions")
     public ResponseEntity transactions(Player player, long transactionId, String transactionType) {
         Player _player = playerRepository.findByUsername(player.getUsername());
         if(_player == null) {
